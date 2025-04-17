@@ -25,8 +25,13 @@ public class Main {
             allocator = new FirstFit();
         else if (strategy == 2)
             allocator = new BestFit();
-        else
+        else if(strategy == 2)
             allocator = new WorstFit();
+        else{
+            allocator = new WorstFit();
+            System.out.println("invalide input!!");
+            System.exit(0);
+        }
 
         System.out.println("Memory blocks are created…");
         printInitialMemory(blocks);
@@ -85,11 +90,11 @@ public class Main {
     public static void printInitialMemory(LinkedList<Block> blocks) {
         System.out.println("Memory blocks:");
         System.out.println("============================================");
-        System.out.println("Block#      size                 start-end     status");
+        System.out.println("Block#      size      start-end      status");
         System.out.println("============================================");
         int i = 0;
         for (Block block : blocks) {
-            System.out.printf("Block%-8d %-20d %-4d-%-7d %-6s\n", i++, block.getSize(), block.getStart(), block.getEnd(), block.getStatus());
+            System.out.printf("Block%-6d %-9d %-4d-%-10d %-6s\n", i++, block.getSize(), block.getStart(), block.getEnd(), block.getStatus());
         }
         System.out.println("============================================");
     }
