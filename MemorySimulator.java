@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class MemorySimulator {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         LinkedList<Block> blocks = new LinkedList<>();
