@@ -25,7 +25,7 @@ public class Main {
             allocator = new FirstFit();
         else if (strategy == 2)
             allocator = new BestFit();
-        else if(strategy == 2)
+        else if(strategy == 3)
             allocator = new WorstFit();
         else{
             allocator = new WorstFit();
