@@ -4,7 +4,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         LinkedList<Block> blocks = new LinkedList<>();
-        Map<Integer, String> idMap = new HashMap<>(); 
+        Map<Integer, String> idMap = new HashMap<>();
+
         System.out.print("Enter the total number of blocks: ");
         int M = input.nextInt();
 
@@ -21,7 +22,7 @@ public class Main {
         AllocationStrategies allocator;
 
         if (strategy == 1)
-            allocator = new FerstFit();
+            allocator = new FirstFit();
         else if (strategy == 2)
             allocator = new BestFit();
         else
@@ -43,11 +44,11 @@ public class Main {
             switch (choice) {
                 case 1:
                     System.out.print("Enter the process ID and size of process: ");
-                    String pIDstr = input.next();       
+                    String pIDstr = input.next();
                     int pSize = input.nextInt();
-                    int pID = pIDstr.hashCode();        
+                    int pID = pIDstr.hashCode();
 
-                    idMap.put(pID, pIDstr);             
+                    idMap.put(pID, pIDstr);
                     allocator.allocate(pID, pSize, blocks);
 
                     for (Block block : blocks) {
@@ -63,34 +64,11 @@ public class Main {
                     System.out.print("Enter the process ID to deallocate: ");
                     String idStr = input.next();
                     int id = idStr.hashCode();
-                    boolean found = false;
-                    for (Block block : blocks) {
-                        if (block.getPID() == id) {
-                            block.setStatus("free");
-                            block.setPID(-1);
-                            block.setInternalFragmentation(0);
-                            found = true;
-                        }
-                    }
-                    if (found)
-                        System.out.println(idStr + " deallocated.");
-                    else
-                        System.out.println("Process not found.");
+                    deallocate(id, idStr, blocks);
                     break;
 
                 case 3:
-                    System.out.println("Memory blocks:");
-                    System.out.println("==========================================================");
-                    System.out.println("Block#  Size  Start-End  Status     ProcessID  InternalFragmentation");
-                    System.out.println("==========================================================");
-                    int i = 0;
-                    for (Block block : blocks) {
-                        String pidName = (block.getPID() == -1) ? "Null" : idMap.getOrDefault(block.getPID(), "???");
-                        System.out.printf("Block%-3d %-5d %-4d-%-7d %-10s %-10s %d\n",
-                                i++, block.getSize(), block.getStart(), block.getEnd(),
-                                block.getStatus(), pidName, block.getInternalFragmentation());
-                    }
-                    System.out.println("==========================================================");
+                    printReport(blocks, idMap);
                     break;
 
                 case 4:
@@ -103,6 +81,7 @@ public class Main {
         }
     }
 
+    // Prints the initial memory layout
     public static void printInitialMemory(LinkedList<Block> blocks) {
         System.out.println("Memory blocks:");
         System.out.println("============================================");
@@ -113,5 +92,38 @@ public class Main {
             System.out.printf("Block%-8d %-20d %-4d-%-7d %-6s\n", i++, block.getSize(), block.getStart(), block.getEnd(), block.getStatus());
         }
         System.out.println("============================================");
+    }
+
+    // Static method to print full memory report
+    public static void printReport(LinkedList<Block> blocks, Map<Integer, String> idMap) {
+        System.out.println("Memory blocks:");
+        System.out.println("==========================================================");
+        System.out.println("Block#  Size  Start-End  Status     ProcessID  InternalFragmentation");
+        System.out.println("==========================================================");
+        int i = 0;
+        for (Block block : blocks) {
+            String pidName = (block.getPID() == -1) ? "Null" : idMap.getOrDefault(block.getPID(), "???");
+            System.out.printf("Block%-3d %-5d %-4d-%-7d %-10s %-10s %d\n",
+                    i++, block.getSize(), block.getStart(), block.getEnd(),
+                    block.getStatus(), pidName, block.getInternalFragmentation());
+        }
+        System.out.println("==========================================================");
+    }
+
+    // Static method to deallocate a process by PID
+    public static void deallocate(int pID, String pIDStr, LinkedList<Block> blocks) {
+        boolean found = false;
+        for (Block block : blocks) {
+            if (block.getPID() == pID) {
+                block.setStatus("free");
+                block.setPID(-1);
+                block.setInternalFragmentation(0);
+                found = true;
+            }
+        }
+        if (found)
+            System.out.println(pIDStr + " deallocated.");
+        else
+            System.out.println("Process not found.");
     }
 }
