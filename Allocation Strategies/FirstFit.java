@@ -3,16 +3,16 @@ import java.util.LinkedList;
 public class FirstFit extends AllocationStrategies {
 
     
-    public void allocate(int pID, int pSize, LinkedList<Block> blocks) {
+    public boolean allocate(int pID, int pSize, LinkedList<Block> blocks) {
 
         if (isAllocated(pID, blocks) != -1) {
-            System.out.printf("The Process P%d is already allocated in address %d\n", pID, isAllocated(pID, blocks));
-            return;
+            System.out.printf("\nThis Process is already allocated at address %d\n", isAllocated(pID, blocks));
+            return false;
         }
 
         if (isFull(blocks)) {
             System.out.println("Allocation Failed!! The memory is full, All Blocks are allocated\nYOU CAN DE-ALLOCATE SOME MEMORY BLOCKS");
-            return;
+            return false;
         }
 
         for (Block block : blocks) {
@@ -20,11 +20,12 @@ public class FirstFit extends AllocationStrategies {
                 block.setStatus("allocated");
                 block.setPID(pID);
                 block.setInternalFragmentation(block.getSize() - pSize);
-                System.out.println("Process " + pID + " allocated at block starting at " + block.getStart());
-                return;   
+               // System.out.println("Process " + pID + " allocated at block starting at " + block.getStart());
+                return true;   
             }
         }
 
         System.out.println("The Process is too big to fit in any free block in the memory");
+        return false;
     }
 }

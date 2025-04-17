@@ -2,7 +2,7 @@ import java.util.LinkedList;
 
 public abstract class AllocationStrategies {
 
-    public abstract void allocate(int pID, int pSize, LinkedList<Block> blocks );
+    public abstract boolean allocate(int pID, int pSize, LinkedList<Block> blocks );
 
     protected int isAllocated(int pID, LinkedList<Block> blocks){
         for (Block block : blocks){
